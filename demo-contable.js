@@ -1,5 +1,5 @@
 const variant=document.querySelector('#variant');const count=document.querySelector('#eventCount');let events=0;
-function track(name,params={}){events++;count.textContent=events;console.log('[GA4 demo]',name,params);window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:name,...params});}
+function track(name,params={}){events++;count.textContent=events;console.log('[GA4 demo]',name,params);window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:name,...params});if(typeof gtag==='function'){gtag('event',name,params);}}
 const copy={a:{headline:'Tu contabilidad, <em>en piloto automático.</em>',sub:'Ledgerly captura, clasifica y reconcilia tus movimientos para que cierres el mes en horas, no en días.'},b:{headline:'Deja de perder horas <em>persiguiendo números.</em>',sub:'El agente financiero de Ledgerly encuentra errores, facturas pendientes y respuestas antes de que se conviertan en problemas.'}};
 function applyVariant(value){const c=copy[value];document.querySelector('#headline').innerHTML=c.headline;document.querySelector('#subheadline').textContent=c.sub;document.querySelector('#assignment').textContent=`Asignado: variante ${value.toUpperCase()}`;track('experiment_assignment',{experiment_id:'hero_headline_v1',variant:value});}
 variant.addEventListener('change',e=>applyVariant(e.target.value));
