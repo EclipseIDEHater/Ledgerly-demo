@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Construye una landing page clara, creíble y lista para validar.">
+  <title>Landing Coach | Asistente de páginas</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">Landing<span>Coach</span></a>
+    <span class="status"><i></i> Coach PMC · Taller de innovación</span>
+  </header>
+
+  <main>
+    <section class="intro">
+      <p class="eyebrow">De la idea a una página que vende</p>
+      <h1>Coach PMC</h1>
+      <p class="lede">Responde unas preguntas y convierte tu idea en un brief de landing con copy, estructura y próximos experimentos.</p>
+      <div class="formula"><span>Descubrimiento</span><b>+</b><span>Valor</span><b>+</b><span>Tracción</span></div>
+      <p><a class="button secondary" href="/analisis">Evaluar viabilidad del proyecto</a></p>
+    </section>
+
+    <section class="workspace">
+      <div class="progress-row"><span id="step-label">Paso 1 de 8</span><span id="progress-percent">13%</span></div>
+      <div class="progress"><div id="progress-bar"></div></div>
+      <form id="brief-form">
+        <fieldset class="step active" data-step="1"><p class="step-kicker">01 · El contexto</p><h2>¿Qué estás construyendo?</h2><p class="hint">Partimos de una oferta concreta y de la persona que tiene el problema.</p><label>Nombre o descripción del producto<input name="product" required placeholder="Ej. Una app para encontrar tutores universitarios"></label><label>¿Para quién es?<input name="audience" required placeholder="Ej. Estudiantes de primer semestre"></label></fieldset>
+        <fieldset class="step" data-step="2"><p class="step-kicker">02 · Entrevistas</p><h2>¿Qué aprendiste hablando con personas?</h2><p class="hint">Usa números para poder calcular porcentajes automáticamente en tu brief. El segundo patrón es opcional.</p><label>¿A cuántas personas entrevistaste en total?<input name="interviewTotal" type="number" min="1" required placeholder="Ej. 8"></label><div class="insight-row"><label>Patrón o frase repetida #1<input name="insight1Text" required placeholder="Ej. No saben a quién pedir ayuda antes de un parcial"></label><label class="insight-count">¿Cuántas lo mencionaron?<input name="insight1Count" type="number" min="0" required placeholder="Ej. 5"></label></div><div class="insight-row"><label>Patrón o frase repetida #2 (opcional)<input name="insight2Text" placeholder="Ej. Llegan sin preparación al examen"></label><label class="insight-count">¿Cuántas lo mencionaron?<input name="insight2Count" type="number" min="0" placeholder="Ej. 3"></label></div></fieldset>
+        <fieldset class="step" data-step="3"><p class="step-kicker">03 · El problema</p><h2>¿Qué problema, causas e implicaciones ves?</h2><p class="hint">Describe el problema con palabras reales. El asistente propondrá causas e implicaciones para que las revises.</p><label>Problema principal<textarea name="problem" required placeholder="Ej. Pierden horas buscando ayuda confiable antes de un parcial"></textarea></label></fieldset>
+        <fieldset class="step" data-step="4"><p class="step-kicker">04 · La propuesta</p><h2>¿Cuál es tu propuesta de valor?</h2><label>Cómo funciona<textarea name="howItWorks" required placeholder="Ej. Conectamos al estudiante con tutores verificados de su universidad"></textarea></label><label>Propuesta de valor actual<textarea name="valueProposition" required placeholder="Ej. Ayudamos a X a lograr Y sin Z"></textarea></label></fieldset>
+        <fieldset class="step" data-step="5"><p class="step-kicker">05 · Confianza</p><h2>Riesgos de no tomar acción y beneficios de tomarla</h2><p class="hint">Describe qué pierde la persona si no actúa y qué obtiene si decide avanzar. Después agrega las señales que ayudan a creer en la solución.</p><label>Riesgos de no tomar acción<textarea name="risks" required placeholder="Ej. Seguir perdiendo horas buscando ayuda, llegar sin preparación al parcial y aumentar la frustración"></textarea></label><label>Beneficios de tomar acción<textarea name="benefits" required placeholder="Ej. Encontrar ayuda confiable, prepararse mejor y saber rápidamente si el tutor es adecuado"></textarea></label><label>Principal objeción<textarea name="objection" required placeholder="Ej. No sé si el tutor realmente domina la materia"></textarea></label><label>Prueba o evidencia disponible<textarea name="socialProof" required placeholder="Ej. 12 entrevistas, 8 interesados, testimonios o todavía ninguna"></textarea></label></fieldset>
+        <fieldset class="step" data-step="6"><p class="step-kicker">06 · El CTA</p><h2>¿Qué acción quieres guiar?</h2><p class="hint">El CTA debe ser un siguiente paso claro y conectado con el valor, no solo “Enviar”.</p><label>CTA deseado<input name="cta" required placeholder="Ej. Quiero encontrar mi tutor"></label></fieldset>
+        <fieldset class="step" data-step="7"><p class="step-kicker">07 · Compra</p><h2>¿Cómo pasa del clic a comprar?</h2><p class="hint">Si todavía no vendes, describe el flujo que quieres validar: registro, demo, pago o contacto.</p><label>Flujo actual o deseado<textarea name="purchaseFlow" required placeholder="Ej. Clic en CTA, registro, agenda una demo y recibe el enlace de pago"></textarea></label></fieldset>
+        <fieldset class="step" data-step="8"><p class="step-kicker">08 · Experimento</p><h2>Elige qué quieres probar primero</h2><p class="hint">La IA propone dos titulares: A prioriza claridad y B enfatiza el dolor. Cambia solo una hipótesis.</p><div class="variant-picker"><label><input type="radio" name="variant" value="a" checked> A · Claridad directa<br><strong id="title-preview-a">Generando propuesta...</strong></label><label><input type="radio" name="variant" value="b"> B · Dolor del cliente<br><strong id="title-preview-b">Generando propuesta...</strong></label></div><div class="preview"><span id="title-status">La IA preparará dos opciones al entrar a este paso.</span></div></fieldset>
+        <div class="actions"><button type="button" class="button secondary" id="back-button" hidden>Anterior</button><button type="button" class="button" id="next-button">Continuar</button><button type="submit" class="button" id="generate-button" hidden>Generar mi landing</button></div>
+      </form>
+    </section>
+
+    <section class="result-section" id="result-section" hidden>
+      <div class="result-heading"><div><p class="eyebrow">Tu brief de conversión</p><h2>Ahora tienes algo que puedes probar.</h2></div><span class="mode-badge" id="mode-badge">Modo local</span></div>
+      <div id="result" class="result-grid"></div>
+      <div class="experiment-card"><div><p class="step-kicker">Siguiente experimento</p><h3>Publica ambas variantes y mide la acción, no los likes.</h3><p>La versión <b id="active-variant">A</b> está activa. Cambia la URL con <code>?variant=b</code> para probar la otra.</p></div><div class="experiment-actions"><button class="button secondary-dark" id="copy-button">Copiar brief</button><a class="button" href="/integraciones">Pasos siguientes</a></div></div>
+    </section>
+
+    <section class="wireframe-section" id="wireframe-section" hidden>
+      <div class="result-heading"><div><p class="eyebrow">Bosquejo</p><h2>Así podría verse tu landing.</h2></div></div>
+      <p class="hint">Un boceto rápido de la estructura, no un diseño final. Úsalo para ubicar cada bloque de copy antes de maquetar.</p>
+      <div id="wireframe" class="wireframe"></div>
+    </section>
+  </main>
+  <footer>Landing Coach · Un laboratorio para aprender haciendo</footer>
+  <script src="app.js"></script>
+</body>
+</html>

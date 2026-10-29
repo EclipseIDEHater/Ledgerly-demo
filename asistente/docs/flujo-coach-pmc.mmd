@@ -1,0 +1,61 @@
+flowchart TD
+    A([Inicio: el equipo abre Coach PMC]) --> B[Define producto y audiencia]
+
+    subgraph DESCUBRIMIENTO[1. Descubrimiento y decisión de mensaje]
+        B --> C[Registra aprendizajes de entrevistas<br/>frases, patrones y frecuencia]
+        C --> D[Describe el problema<br/>con palabras de la audiencia]
+        D --> E[Explica cómo funciona<br/>y escribe la propuesta de valor]
+        E --> F[Define confianza<br/>riesgos, beneficios, objeción y evidencia]
+        F --> G[Elige el CTA y describe<br/>el flujo después del clic]
+    end
+
+    G --> H[Elige el experimento:<br/>A claridad directa o B dolor del cliente]
+    H --> I{Entra al paso 8}
+    I --> J[Envía los datos a /api/titles]
+    J --> K{¿OpenAI responde?}
+    K -- Sí --> L[Muestra dos titulares generados por IA]
+    K -- No --> M[Muestra titulares sugeridos localmente]
+    L --> N
+    M --> N[El equipo revisa y selecciona la variante]
+
+    N --> O[Pulsa Generar mi landing]
+    O --> P[Construye el resumen de entrevistas<br/>incluye conteos y porcentajes]
+    P --> Q[Envía el brief a /api/generate]
+    Q --> R{¿OpenAI está disponible?}
+    R -- Sí --> S[Recibe el brief estructurado en JSON]
+    R -- No o falla --> T[Genera un resultado local<br/>basado en plantillas y datos del equipo]
+    S --> U
+    T --> U[Renderiza el resultado y el wireframe]
+
+    subgraph RESULTADO[2. Artefactos para revisar]
+        U --> V[Titular y subtítulo]
+        U --> W[Problema, causas e implicaciones]
+        U --> X[Propuesta de valor, visual y prueba social]
+        U --> Y[CTA, objeciones, features y FAQ]
+        U --> Z[Riesgos, beneficios y flujo de compra]
+        U --> AA[Métricas de confianza y plan de tracción]
+        U --> AB[Nota del creador y próximos pasos]
+    end
+
+    V --> AC{¿Hay que ajustar un bloque?}
+    W --> AC
+    X --> AC
+    Y --> AC
+    Z --> AC
+    AA --> AC
+    AB --> AC
+    AC -- Sí --> AD[Edita el paso correspondiente]
+    AD --> B
+    AC -- No --> AE[Publica la landing y mide el CTA]
+
+    AE --> AF[Compara A/B por variante,<br/>fuente y conversión]
+    AF --> AG{¿Qué aprendió el equipo?}
+    AG -- Nueva hipótesis --> B
+    AG -- Continuar con la propuesta --> AH([Fin: siguiente iteración validada])
+
+    classDef decision fill:#fff3cd,stroke:#856404,color:#000
+    classDef input fill:#e8f5e9,stroke:#2e7d32,color:#000
+    classDef output fill:#e3f2fd,stroke:#1565c0,color:#000
+    class I,K,R,AC,AG decision
+    class B,C,D,E,F,G,H,N,O,P,AD,AE,AF input
+    class U,V,W,X,Y,Z,AA,AB,S,T,AH output
