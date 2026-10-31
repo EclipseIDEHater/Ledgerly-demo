@@ -1,6 +1,11 @@
 const variantSelect = document.querySelector('#variant');
 const eventCount = document.querySelector('#eventCount');
 
+const experimentId = 'hero_headline_v1';
+const storageKey = `ab_${experimentId}`;
+const urlParameters = new URLSearchParams(window.location.search);
+const debugMode = urlParameters.has('debug');
+
 let eventsCaptured = 0;
 
 const copy = {
@@ -14,43 +19,85 @@ const copy = {
   }
 };
 
+function isVariant(value) {
+  return Object.keys(copy).includes(value);
+}
+
+function readStoredVariant() {
+  try {
+    return localStorage.getItem(storageKey);
+  } catch {
+    return null;
+  }
+}
+
+function storeVariant(value) {
+  try {
+    localStorage.setItem(storageKey, value);
+  } catch {
+    // Sin almacenamiento la variante solo dura esta visita.
+  }
+}
+
+// ?variant=a|b es para pruebas: no guarda nada y se reporta como qa_a o qa_b.
+function resolveVariant() {
+  const forcedVariant = urlParameters.get('variant');
+
+  if (isVariant(forcedVariant)) {
+    return { value: forcedVariant, reported: `qa_${forcedVariant}` };
+  }
+
+  let value = readStoredVariant();
+
+  if (!isVariant(value)) {
+    value = Math.random() < 0.5 ? 'a' : 'b';
+    storeVariant(value);
+  }
+
+  return { value, reported: value };
+}
+
+const { value: activeVariant, reported: reportedVariant } = resolveVariant();
+
 function track(eventName, parameters = {}) {
   eventsCaptured += 1;
   eventCount.textContent = eventsCaptured;
 
   console.log('[GA4 demo]', eventName, parameters);
 
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    event: eventName,
-    ...parameters
-  });
-
   if (typeof gtag === 'function') {
     gtag('event', eventName, {
       ...parameters,
-      debug_mode: true
+      ...(debugMode && { debug_mode: true })
     });
   }
 }
 
-function applyVariant(value) {
-  const selectedCopy = copy[value];
+function applyVariant() {
+  const selectedCopy = copy[activeVariant];
 
   document.querySelector('#headline').innerHTML = selectedCopy.headline;
   document.querySelector('#subheadline').textContent = selectedCopy.sub;
   document.querySelector('#assignment').textContent =
-    `Asignado: variante ${value.toUpperCase()}`;
+    `Asignado: variante ${activeVariant.toUpperCase()}${reportedVariant === activeVariant ? '' : ' (QA)'}`;
+  variantSelect.value = activeVariant;
+
+  if (typeof gtag === 'function') {
+    gtag('set', 'user_properties', { hero_variant: reportedVariant });
+  }
 
   track('experiment_assignment', {
-    experiment_id: 'hero_headline_v1',
-    variant: value
+    experiment_id: experimentId,
+    variant: reportedVariant
   });
 }
 
 function setupVariantSelector() {
   variantSelect.addEventListener('change', (event) => {
-    applyVariant(event.target.value);
+    const url = new URL(window.location.href);
+
+    url.searchParams.set('variant', event.target.value);
+    window.location.assign(url);
   });
 }
 
@@ -59,7 +106,7 @@ function setupCtaTracking() {
     button.addEventListener('click', () => {
       track('click_cta', {
         cta_location: button.dataset.cta,
-        variant: variantSelect.value
+        variant: reportedVariant
       });
 
       alert('Demo: aquí abriríamos el registro de Ledgerly. Evento click_cta enviado.');
@@ -72,7 +119,7 @@ function setupDemoTracking() {
 
   demoButton.addEventListener('click', () => {
     track('view_demo', {
-      variant: variantSelect.value
+      variant: reportedVariant
     });
   });
 }
@@ -84,7 +131,7 @@ function setupFeatureTracking() {
 
       track('click_feature', {
         feature: link.dataset.learn,
-        variant: variantSelect.value
+        variant: reportedVariant
       });
     });
   });
@@ -116,7 +163,7 @@ function setupScrollNavigation() {
 function initializeAnalytics() {
   track('page_view', {
     page_title: 'Ledgerly landing demo',
-    variant: variantSelect.value
+    variant: reportedVariant
   });
 }
 
@@ -126,6 +173,7 @@ function initializePage() {
   setupDemoTracking();
   setupFeatureTracking();
   setupScrollNavigation();
+  applyVariant();
   initializeAnalytics();
 }
 

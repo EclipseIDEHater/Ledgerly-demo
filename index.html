@@ -10,11 +10,15 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-       gtag('config', 'G-J245BRQQJP', {
-         debug_mode: true
-       });
+      // demo-contable.js envía el page_view para que incluya la variante.
+      const gaConfig = { send_page_view: false };
 
-       gtag('set', 'debug_mode', true);
+      // GA4 activa DebugView aunque debug_mode sea false: solo se agrega con ?debug=1.
+      if (new URLSearchParams(window.location.search).has('debug')) {
+        gaConfig.debug_mode = true;
+      }
+
+      gtag('config', 'G-J245BRQQJP', gaConfig);
     </script>
 
 
